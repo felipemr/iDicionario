@@ -58,6 +58,10 @@
     } completion:^(BOOL finished) {
         LetraViewController *proximo =[[LetraViewController alloc]init];
         proximo.index=self.index+1;
+        if (proximo.index>=alfabeto.arrayLetra.count) {
+            
+            [self.navigationController popToRootViewControllerAnimated:YES];
+        }
         
         [self.navigationController pushViewController:proximo animated:YES];
     }];
