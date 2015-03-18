@@ -3,64 +3,111 @@
 //  Navigation
 //
 //  Created by Vinicius Miana on 2/23/14.
-//  Copyright (c) 2014 Vinicius Miana. All rights reserved.
+//  Copyright (c) 2014 Felipe M Ramos. All rights reserved.
 //
 
 #import "LetraViewController.h"
 
 @implementation LetraViewController
 
-@synthesize alfabeto;
+@synthesize alfabeto,iView,botao,letraCaps,imgBotao,toolBar,palavra,letra;
 
+#pragma viewDelegate methods
 -(void) viewDidLoad {
     [super viewDidLoad];
+    //instacia do alfabeto e da Letra da View
     alfabeto=[Alfabeto instancia];
-    Letra *l=alfabeto.arrayLetra[self.index];
-    self.title = l.letra;
+    letra=alfabeto.arrayLetra[self.index];
+    
+    //config de nav bar
+    self.title = letra.letra;
     UIBarButtonItem *next = [[UIBarButtonItem alloc]
                              initWithBarButtonSystemItem:UIBarButtonSystemItemFastForward target:self action:@selector(next:)];
     self.navigationItem.rightBarButtonItem=next;
     
-    UIButton *botao = [UIButton
-                                        buttonWithType:UIButtonTypeSystem];
-    [botao
-     setTitle:l.palavra
-     forState:UIControlStateNormal];
+    
+    //init de properties
+    botao = [UIButton buttonWithType:UIButtonTypeSystem];
+    
+    
+    letraCaps=[[UILabel alloc]initWithFrame:CGRectMake(50, 140, 60, 75)];
+    imgBotao=[UIButton buttonWithType:UIButtonTypeCustom];
+    
+    
+    //setando as properties
+    [botao setTitle:letra.palavra forState:UIControlStateNormal];
     [botao sizeToFit];
     botao.center = self.view.center;
+    
     UIImage *ima=[UIImage imageNamed:@"skywalk11.jpg"];
-    UIImageView *Iview=[[UIImageView alloc] init];
-    [Iview setFrame:CGRectMake(self.view.center.x-75, self.view.center.y-120, 150, 100)];
-    [Iview setBackgroundColor:[UIColor colorWithRed:0.5 green:0.5 blue:0.5 alpha:1]];
-    [Iview setImage:ima];
-    _img=Iview;
-    _but=botao;
-    _but.alpha=0;
-    [self.view addSubview:_but];
-    _img.alpha=0.0;
-    [self.view addSubview:_img];
- 
+    [imgBotao setBackgroundImage:ima forState:UIControlStateNormal];
+    [imgBotao setFrame:CGRectMake(self.view.center.x-75, self.view.center.y-120, 150, 100)];
+//    [imgBotao addTarget:self action:@selector(tapImg:) forControlEvents:UIControlEventTouchDown];
+    
+    [letraCaps setText:letra.letra];
+    [letraCaps setFont:[UIFont fontWithName:@"Chalkduster" size:78]];
+    [letraCaps setTextColor:[UIColor colorWithRed:.81 green:.89 blue:.73 alpha:1]];
+    
+    
+    //toolBar
+    toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 65, self.view.bounds.size.width, 45)];
+    [toolBar setBackgroundColor:[UIColor blackColor]];
+    UIBarButtonItem *edit=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editar)];
+    NSArray *barItens=@[edit];
+    [toolBar setItems:barItens animated:YES];
+    
+    
+    [self hideContents];
+    [self.view addSubview:botao];
+    [self.view addSubview:imgBotao];
+    [self.view addSubview:letraCaps];
+    [self.view addSubview:toolBar];
 }
 
+ 
 -(void)viewWillAppear:(BOOL)animated{
     [UIView animateWithDuration:2 animations:^{
-        _img.alpha=1;
-        _but.alpha=1;
+        [self ShowContents];
     }];
 }
 
+-(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [palavra endEditing:YES];
+    [botao setSelected:NO];
+}
 
+#pragma mark - UItextField
+
+-(void)editar{
+    [botao setHidden:YES];
+    palavra=[[UITextField alloc]initWithFrame:CGRectMake(50, 75, 60, 75)];
+    palavra.delegate=self;
+    [palavra setBackgroundColor:[UIColor greenColor]];
+    palavra.text=botao.titleLabel.text;
+    palavra.center=self.view.center;
+    [self.view addSubview:palavra];
+    }
+
+-(void)textFieldDidEndEditing:(UITextField *)textField{
+    [palavra removeFromSuperview];
+    NSString *newPalavra=textField.text;
+    [letra setPalavra:newPalavra];
+    [botao setTitle:newPalavra forState:UIControlStateNormal];
+    [botao.titleLabel sizeToFit];
+    [botao sizeToFit];
+    [botao setHidden:NO];
+}
+
+#pragma nav controls
 -(void)next:(id)sender {
     [UIView animateWithDuration:1 animations:^{
-        _img.alpha=0;
-        _but.alpha=0;
+        [self hideContents];
         
     } completion:^(BOOL finished) {
         LetraViewController *proximo =[[LetraViewController alloc]init];
-        proximo.index=self.index+1;
+        proximo.index=self.index+1;//bug curioso ao colocar index++
         if (proximo.index>=alfabeto.arrayLetra.count) {
-            
-            [self.navigationController popToRootViewControllerAnimated:YES];
+            [self.navigationController popToRootViewControllerAnimated:YES];//manda pra primeira view
         }
         
         [self.navigationController pushViewController:proximo animated:YES];
@@ -69,7 +116,28 @@
     
 }
 
+-(void)tapImg:(id)sender{
+    NSLog(@"Melhor metodo!");
+    [UIView animateWithDuration:2 animations:^{
+        imgBotao.transform=CGAffineTransformMakeScale(2, 2);
+    }];
+}
 
+
+#pragma Class Methods
+
+-(void)hideContents{
+    letraCaps.alpha=0;
+    botao.alpha=0;
+    imgBotao.alpha=0;
+    toolBar.alpha=0;
+}
+-(void)ShowContents{
+    letraCaps.alpha=1;
+    botao.alpha=1;
+    imgBotao.alpha=1;
+    toolBar.alpha=1;
+}
 
 
 @end

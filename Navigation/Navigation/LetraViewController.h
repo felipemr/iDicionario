@@ -3,18 +3,28 @@
 //  Navigation
 //
 //  Created by Vinicius Miana on 2/23/14.
-//  Copyright (c) 2014 Vinicius Miana. All rights reserved.
+//  Copyright (c) 2014 Felipe M Ramos. All rights reserved.
 //
 
 #import <UIKit/UIKit.h>
 #import "Alfabeto.h"
 #import "Letra.h"
 
-@interface LetraViewController : UIViewController
+@interface LetraViewController : UIViewController<UITextFieldDelegate>
 
 @property Alfabeto *alfabeto;
+@property Letra *letra;
 @property int index;
-@property UIImageView *img;
-@property UIButton *but;
+@property UILabel *letraCaps;
+@property UIImageView *iView;
+@property UITextField *palavra;
+@property UIButton *botao,*imgBotao;
+@property UIToolbar *toolBar;
+
+
+
+-(void)hideContents;
+-(void)ShowContents;
+
 
 @end
