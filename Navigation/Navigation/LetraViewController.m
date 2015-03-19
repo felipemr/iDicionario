@@ -15,6 +15,8 @@
 #pragma viewDelegate methods
 -(void) viewDidLoad {
     [super viewDidLoad];
+    
+    
     //instacia do alfabeto e da Letra da View
     alfabeto=[Alfabeto instancia];
     letra=alfabeto.arrayLetra[self.index];

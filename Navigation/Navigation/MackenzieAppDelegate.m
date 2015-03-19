@@ -8,24 +8,37 @@
 
 #import "MackenzieAppDelegate.h"
 #import "LetraViewController.h"
+#import "IndexTableViewController.h"
 
 @implementation MackenzieAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    IndexTableViewController *itvc=[[IndexTableViewController alloc]init];
+    
     LetraViewController *viewController = [[LetraViewController alloc]
                                            initWithNibName:nil
                                            bundle:nil];
+   
     
     
     self.navigationController = [[UINavigationController alloc]
                                  initWithRootViewController:viewController];
+    
+    
+    self.tabBarController=[[UITabBarController alloc]init];
+    
+    self.tabBarController.viewControllers=[NSArray arrayWithObjects:itvc,self.navigationController, nil];
+    
     self.window = [[UIWindow alloc]
                    initWithFrame:[[UIScreen mainScreen] bounds]];
-    self.window.rootViewController = self.navigationController;
+    self.window.rootViewController = self.tabBarController;
 
 
     
+//    UITabBarItem *navControl=[[UITabBarItem alloc]initWithTabBarSystemItem:UITabBarSystemItemSearch tag:2];
+//    [self.tabBarController setToolbarItems:[NSArray arrayWithObjects:tabView,navControl, nil]];
     self.window.backgroundColor = [UIColor whiteColor];
     [self.window makeKeyAndVisible];
     
