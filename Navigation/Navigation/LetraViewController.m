@@ -15,11 +15,13 @@
 #pragma viewDelegate methods
 -(void) viewDidLoad {
     [super viewDidLoad];
-    
-    
     //instacia do alfabeto e da Letra da View
     alfabeto=[Alfabeto instancia];
     letra=alfabeto.arrayLetra[self.index];
+    
+    
+    self.navigationController.tabBarItem.title=[NSString stringWithFormat:@"%@",letra.letra];
+
     
     //config de nav bar
     self.title = letra.letra;
@@ -141,12 +143,13 @@
 
 #pragma Touch Events
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
+    [palavra endEditing:YES];
+    [botao setSelected:NO];
     UITouch *toque=[touches anyObject];//objeto toque
     CGPoint localToque=[toque locationInView:self.view];//local onde estamos tocando
     if (CGRectContainsPoint(iView.frame, localToque)) {
         _iViewState=YES;
-        //    [palavra endEditing:YES];
-        //    [botao setSelected:NO];
+        
     }
 }
 -(void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event{

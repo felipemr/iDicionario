@@ -19,7 +19,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-//    self.tabBarItem=[[UITabBarItem alloc]initWithTitle:@"alfabeto" image:<#(UIImage *)#> tag:1];
+    self.tabBarItem=[[UITabBarItem alloc]initWithTitle:@"alfabeto" image:nil tag:1];
     
     
     alfabeto=[Alfabeto instancia];

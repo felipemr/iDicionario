@@ -20,11 +20,12 @@
     LetraViewController *viewController = [[LetraViewController alloc]
                                            initWithNibName:nil
                                            bundle:nil];
-   
     
     
     self.navigationController = [[UINavigationController alloc]
                                  initWithRootViewController:viewController];
+    self.navigationController.tabBarItem =[[UITabBarItem alloc]initWithTitle:@"Letras" image:nil tag:2];
+    
     
     
     self.tabBarController=[[UITabBarController alloc]init];
