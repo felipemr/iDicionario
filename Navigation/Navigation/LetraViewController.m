@@ -10,7 +10,7 @@
 
 @implementation LetraViewController
 
-@synthesize alfabeto,iView,botao,letraCaps,imgBotao,toolBar,palavra,letra;
+@synthesize alfabeto,iView,botao,letraCaps,toolBar,palavra,letra;
 
 #pragma viewDelegate methods
 -(void) viewDidLoad {
@@ -33,23 +33,28 @@
     //init de properties
     UIImage *ima=[UIImage imageNamed:@"skywalk11.jpg"];
     iView=[[UIImageView alloc]initWithImage:ima];
+    UIColor *cor=[UIColor colorWithRed:0.25 green:.25 blue:.25 alpha:1] ;
+    
+    
     botao = [UIButton buttonWithType:UIButtonTypeSystem];
-    letraCaps=[[UILabel alloc]initWithFrame:CGRectMake(50, 140, 60, 75)];
-//    imgBotao=[UIButton buttonWithType:UIButtonTypeCustom];
+    letraCaps=[[UILabel alloc]initWithFrame:CGRectMake(50, 180, 60, 75)];
     
     
     //setando as properties
     [botao setTitle:letra.palavra forState:UIControlStateNormal];
+    [botao setFrame:CGRectMake(self.view.center.x, self.view.center.y+200, 0, 0)];
     [botao sizeToFit];
-    botao.center = self.view.center;
+//    botao.center = self.view.center;
     
     
     
-    [iView setFrame:CGRectMake(self.view.center.x-75, self.view.center.y-120, 150, 100)];
+    [iView setFrame:CGRectMake(self.view.center.x-125, self.view.center.y-150, 250, 0)];
+    [iView.layer setBorderColor:cor.CGColor];
+    [iView.layer setBorderWidth:2];
+    iView.layer.masksToBounds=YES;
+    iView.contentMode=UIViewContentModeScaleAspectFill;
+    iView.layer.cornerRadius=125;
     
-//    [imgBotao setBackgroundImage:ima forState:UIControlStateNormal];
-//    [imgBotao setFrame:CGRectMake(self.view.center.x-75, self.view.center.y-120, 150, 100)];
-//    [imgBotao addTarget:self action:@selector(tapImg:) forControlEvents:UIControlEventTouchDown];
     
     [letraCaps setText:letra.letra];
     [letraCaps setFont:[UIFont fontWithName:@"Chalkduster" size:78]];
@@ -64,6 +69,12 @@
     [toolBar setItems:barItens animated:YES];
     
     
+    //uigestures
+    UIPinchGestureRecognizer *pinchRecognizer=[[UIPinchGestureRecognizer alloc]initWithTarget:self action:@selector(pinch:)];
+    [self.view addGestureRecognizer:pinchRecognizer];
+    
+    
+    
     [self hideContents];
     [self.view addSubview:botao];
     [self.view addSubview:iView];
@@ -75,6 +86,8 @@
 -(void)viewWillAppear:(BOOL)animated{
     [UIView animateWithDuration:2 animations:^{
         [self ShowContents];
+        [iView setFrame:CGRectMake(iView.frame.origin.x, iView.frame.origin.y, iView.frame.size.width, 150)];
+        iView.center=self.view.center;
     }];
 }
 
@@ -118,12 +131,26 @@
     
 }
 
-//-(void)tapImg:(id)sender{
-//    NSLog(@"Melhor metodo!");
-//    [UIView animateWithDuration:2 animations:^{
-//        imgBotao.transform=CGAffineTransformMakeScale(2, 2);
-//    }];
-//}
+#pragma selectors
+-(void)pinch:(id)sender{
+    UIPinchGestureRecognizer *pinch=sender;
+    
+//    if([(pinch state] == UIGestureRecognizerStateBegan) {
+//        _lastScale = 1.0;
+//    }
+//    CGFloat scale = 1.0 - (_lastScale - pinch.scale);
+
+    if (_iViewState) {
+        [UIView animateWithDuration:0 animations:^{
+            iView.transform=CGAffineTransformMakeScale(pinch.scale, pinch.scale);
+        }];
+    }
+    
+//    if (pinch.state == UIGestureRecognizerStateEnded) {
+//        _lastScale=scale;
+//        [iView setFrame:CGRectMake(iView.frame.origin.x, iView.frame.origin.y, iView.frame.size.width*scale, iView.frame.size.height*scale)];
+//    }
+}
 
 
 #pragma Class Methods
@@ -159,9 +186,7 @@
     if (_iViewState) {
         [UIView animateWithDuration:0 animations:^{
             iView.transform=CGAffineTransformMakeTranslation(localToque.x-iView.center.x, localToque.y-iView.center.y);
-        } completion:^(BOOL finished) {
-            nil;
-        }];
+        } ];
     }
 }
 

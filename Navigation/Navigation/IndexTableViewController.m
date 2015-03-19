@@ -66,7 +66,6 @@
     CGRect myFrame = CGRectMake(10.0, 10.0, 220, 25.0);
     palavra = [[UILabel alloc] initWithFrame:myFrame];
     Letra *letra=alfabeto.arrayLetra[indexPath.row];
-    NSLog(@"%@",letra.palavra);
     palavra.text=letra.palavra;
     [cell addSubview:palavra];
 

@@ -18,6 +18,7 @@
 @property UILabel *letraCaps;
 @property UIImageView *iView;
 @property BOOL iViewState;
+@property CGFloat lastScale;
 @property UITextField *palavra;
 @property UIButton *botao,*imgBotao;
 @property UIToolbar *toolBar;
