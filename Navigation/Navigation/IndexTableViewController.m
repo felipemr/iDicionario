@@ -114,6 +114,7 @@
     UINavigationController *navControl=self.tabBarController.viewControllers[1];
     LetraViewController *viewController=[[LetraViewController alloc]init];
     viewController.letra=letra;
+    [navControl showViewController:viewController sender:self];
     self.tabBarController.selectedViewController=navControl;
     
 }
