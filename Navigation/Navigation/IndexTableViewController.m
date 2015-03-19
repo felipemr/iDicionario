@@ -111,6 +111,10 @@
 
 -(void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
     Letra *letra=alfabeto.arrayLetra[indexPath.row];
+    UINavigationController *navControl=self.tabBarController.viewControllers[1];
+    LetraViewController *viewController=[[LetraViewController alloc]init];
+    viewController.letra=letra;
+    self.tabBarController.selectedViewController=navControl;
     
 }
 

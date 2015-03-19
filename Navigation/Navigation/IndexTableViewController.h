@@ -8,6 +8,7 @@
 
 #import <UIKit/UIKit.h>
 #import "Alfabeto.h"
+#import "LetraViewController.h"
 
 @interface IndexTableViewController : UITableViewController
 
