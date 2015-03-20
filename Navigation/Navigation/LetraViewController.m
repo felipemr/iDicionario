@@ -75,7 +75,8 @@
     
     UIBarButtonItem *edit=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editar)];
     UIBarButtonItem *eDate=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(changeDate)];
-    NSArray *barItens=@[edit,eDate];
+    UIBarButtonItem *search=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemSearch target:self action:@selector(search)];
+    NSArray *barItens=@[edit,eDate,search];
     [toolBar setItems:barItens animated:YES];
     
     
@@ -120,6 +121,12 @@
     datePicker=[[UIDatePicker alloc]initWithFrame:CGRectMake(self.view.center.x-150, self.view.center.y+25, 0, 0)];
     datePicker.datePickerMode=UIDatePickerModeDate;
     [self.view addSubview:datePicker];
+}
+
+-(void)search{
+    UISearchBar *sBar=[[UISearchBar alloc]initWithFrame:CGRectMake(0, 109, self.view.bounds.size.width, 45)];
+    [sBar setDelegate:self];
+    [self.view addSubview:sBar];
 }
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
@@ -190,6 +197,7 @@
 #pragma Touch Events
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [palavra endEditing:YES];
+    [palavra endEditing:YES];
     [botao setSelected:NO];
     
     
@@ -222,4 +230,32 @@
     _iViewState=NO;
 }
 
+#pragma - SearchBarDelegate
+
+-(void)searchBarSearchButtonClicked:(UISearchBar *)searchBar{
+    BOOL flag=NO;
+    for (Letra *letter in alfabeto.arrayLetra) {
+        if ([letter.palavra isEqualToString:searchBar.text]) {
+            flag=YES;
+            LetraViewController *achada=[[LetraViewController alloc]init];
+            achada.letra=letter;
+            [self.navigationController pushViewController:achada animated:YES];
+        }
+    }
+    if (!flag) {
+        [UIView animateKeyframesWithDuration:1 delay:0 options:UIViewKeyframeAnimationOptionAutoreverse | UIViewKeyframeAnimationOptionRepeat animations:^{
+            [UIView addKeyframeWithRelativeStartTime:0 relativeDuration:0.2 animations:^{
+                searchBar.transform=CGAffineTransformMakeTranslation(5, 0);
+            }];
+            [UIView addKeyframeWithRelativeStartTime:0.2 relativeDuration:0.2 animations:^{
+                searchBar.transform=CGAffineTransformMakeTranslation(-5, 0);
+            }];
+            [UIView addKeyframeWithRelativeStartTime:0.4 relativeDuration:0.2 animations:^{
+                searchBar.transform=CGAffineTransformMakeTranslation(0, 0);
+            }];
+        } completion:nil];
+        
+    }
+    
+}
 @end

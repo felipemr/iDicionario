@@ -10,7 +10,7 @@
 #import "Alfabeto.h"
 #import "Letra.h"
 
-@interface LetraViewController : UIViewController<UITextFieldDelegate,UIPickerViewDelegate>
+@interface LetraViewController : UIViewController<UITextFieldDelegate,UISearchBarDelegate>
 
 @property Alfabeto *alfabeto;
 @property Letra *letra;
