@@ -12,6 +12,7 @@
 
 @property NSString *letra,*palavra;
 @property UIImage *img;
+@property NSDate *date;
 
 
 -(instancetype)initWithLetra:(NSString *)letra andPalavra:(NSString *)palavra;

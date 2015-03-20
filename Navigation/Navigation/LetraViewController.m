@@ -10,7 +10,7 @@
 
 @implementation LetraViewController
 
-@synthesize alfabeto,iView,botao,letraCaps,toolBar,palavra,letra;
+@synthesize alfabeto,iView,botao,letraCaps,toolBar,palavra,letra,data,datePicker;
 
 #pragma viewDelegate methods
 -(void) viewDidLoad {
@@ -38,17 +38,25 @@
     
     botao = [UIButton buttonWithType:UIButtonTypeSystem];
     letraCaps=[[UILabel alloc]initWithFrame:CGRectMake(50, 180, 60, 75)];
-    
+    data=[[UILabel alloc]initWithFrame:CGRectMake(self.view.center.x-150, self.view.center.y+30, 300, 150)];
     
     //setando as properties
     [botao setTitle:letra.palavra forState:UIControlStateNormal];
     [botao setFrame:CGRectMake(self.view.center.x, self.view.center.y+200, 0, 0)];
     [botao sizeToFit];
-//    botao.center = self.view.center;
     
     
     
-    [iView setFrame:CGRectMake(self.view.center.x-125, self.view.center.y-150, 250, 0)];
+    _dateFormat=[[NSDateFormatter alloc]init];
+    [_dateFormat setDateStyle:NSDateIntervalFormatterFullStyle];
+    [_dateFormat setLocale:[NSLocale currentLocale]];
+    
+    [data setText:[NSString stringWithFormat:@"%@",[_dateFormat stringFromDate:letra.date]]];
+
+    
+    
+    
+    [iView setFrame:CGRectMake(self.view.center.x-125, self.view.center.y-175, 250, 0)];
     [iView.layer setBorderColor:cor.CGColor];
     [iView.layer setBorderWidth:2];
     iView.layer.masksToBounds=YES;
@@ -62,11 +70,14 @@
     
     
     //toolBar
-    toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 65, self.view.bounds.size.width, 45)];
+    toolBar=[[UIToolbar alloc]initWithFrame:CGRectMake(0, 64, self.view.bounds.size.width, 45)];
     [toolBar setBackgroundColor:[UIColor blackColor]];
+    
     UIBarButtonItem *edit=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemEdit target:self action:@selector(editar)];
-    NSArray *barItens=@[edit];
+    UIBarButtonItem *eDate=[[UIBarButtonItem alloc]initWithBarButtonSystemItem:UIBarButtonSystemItemCompose target:self action:@selector(changeDate)];
+    NSArray *barItens=@[edit,eDate];
     [toolBar setItems:barItens animated:YES];
+    
     
     
     //uigestures
@@ -80,28 +91,36 @@
     [self.view addSubview:iView];
     [self.view addSubview:letraCaps];
     [self.view addSubview:toolBar];
+    [self.view addSubview:data];
 }
 
  
 -(void)viewWillAppear:(BOOL)animated{
     [UIView animateWithDuration:2 animations:^{
         [self ShowContents];
-        [iView setFrame:CGRectMake(iView.frame.origin.x, iView.frame.origin.y, iView.frame.size.width, 150)];
-        iView.center=self.view.center;
+        [iView setFrame:CGRectMake(iView.frame.origin.x, iView.frame.origin.y+5, iView.frame.size.width, 150)];
+//        iView.center=self.view.center;
     }];
 }
 
-#pragma mark - UItextField
+#pragma mark - Selectors
 
 -(void)editar{
     [botao setHidden:YES];
-    palavra=[[UITextField alloc]initWithFrame:CGRectMake(50, 75, 60, 75)];
+    palavra=[[UITextField alloc]initWithFrame:CGRectMake(self.view.center.x-50, 120, 100, 75)];
     palavra.delegate=self;
     [palavra setBackgroundColor:[UIColor greenColor]];
     palavra.text=botao.titleLabel.text;
-    palavra.center=self.view.center;
+//    palavra.center=self.view.center;
     [self.view addSubview:palavra];
     }
+
+-(void)changeDate{
+    [data setHidden:YES];
+    datePicker=[[UIDatePicker alloc]initWithFrame:CGRectMake(self.view.center.x-150, self.view.center.y+25, 0, 0)];
+    datePicker.datePickerMode=UIDatePickerModeDate;
+    [self.view addSubview:datePicker];
+}
 
 -(void)textFieldDidEndEditing:(UITextField *)textField{
     [palavra removeFromSuperview];
@@ -172,6 +191,15 @@
 -(void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event{
     [palavra endEditing:YES];
     [botao setSelected:NO];
+    
+    
+    [datePicker endEditing:YES];
+    letra.date=[datePicker date];
+    [data setText:[NSString stringWithFormat:@"%@",[_dateFormat stringFromDate:letra.date]]];
+    [datePicker setHidden:YES];
+    [data setHidden:NO];
+    
+    
     UITouch *toque=[touches anyObject];//objeto toque
     CGPoint localToque=[toque locationInView:self.view];//local onde estamos tocando
     if (CGRectContainsPoint(iView.frame, localToque)) {
@@ -193,4 +221,5 @@
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     _iViewState=NO;
 }
+
 @end

@@ -17,6 +17,7 @@
     
     self.letra=letra;
     self.palavra=palavrinha;
+    _date=[[NSDate alloc]init];
     
     return self;
 }
