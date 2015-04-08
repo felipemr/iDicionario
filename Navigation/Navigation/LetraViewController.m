@@ -212,6 +212,10 @@
     CGPoint localToque=[toque locationInView:self.view];//local onde estamos tocando
     if (CGRectContainsPoint(iView.frame, localToque)) {
         _iViewState=YES;
+        [UIView animateWithDuration:0 animations:^{
+            [iView setTransform:CGAffineTransformMakeScale(1.25, 1.25)];
+            
+        }];
         
     }
 }
@@ -222,12 +226,18 @@
     if (_iViewState) {
         [UIView animateWithDuration:0 animations:^{
             iView.transform=CGAffineTransformMakeTranslation(localToque.x-iView.center.x, localToque.y-iView.center.y);
+//            [iView setTransform:CGAffineTransformMakeScale(1.1, 1.5)];
         } ];
+
     }
 }
 
 -(void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event{
     _iViewState=NO;
+    [UIView animateWithDuration:0 animations:^{
+        [iView setTransform:CGAffineTransformMakeScale(1, 1)];
+        
+    }];
 }
 
 #pragma - SearchBarDelegate
